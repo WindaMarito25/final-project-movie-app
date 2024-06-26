@@ -1,5 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, FlatList } from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react'
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native'
 import type { MovieListProps, Movie } from '../../types/app'
 import { API_ACCESS_TOKEN } from '@env'
 import MovieItem from '../movie/MovieItem'
@@ -17,12 +23,12 @@ const coverImageSize = {
 
 const MovieList = ({ title, path, coverType }: MovieListProps): JSX.Element => {
   const [movies, setMovies] = useState<Movie[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    getMovieList()
-  }, [])
-
-  const getMovieList = (): void => {
+  const getMovieList = useCallback((): void => {
+    setLoading(true)
+    setError(null)
     const url = `https://api.themoviedb.org/3/${path}`
     const options = {
       method: 'GET',
@@ -36,13 +42,17 @@ const MovieList = ({ title, path, coverType }: MovieListProps): JSX.Element => {
       .then(async (response) => await response.json())
       .then((response) => {
         setMovies(response.results)
+        setLoading(false)
       })
       .catch((errorResponse) => {
-        console.log(errorResponse)
+        setError('Failed to fetch data')
+        setLoading(false)
       })
-  }
+  }, [path])
 
-  console.log(movies)
+  useEffect(() => {
+    getMovieList()
+  }, [getMovieList])
 
   return (
     <View>
