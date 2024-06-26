@@ -1,10 +1,22 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import HomeStackNavigation from '../navigations/HomeStackNavigation'
+import MovieDetail from '../navigations/MovieDetail'
 
 export default function Home(): JSX.Element {
+  const Stack = createNativeStackNavigator()
   return (
-    <View>
-      <Text>Home</Text>
-    </View>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="HomeStackNavigation"
+        component={HomeStackNavigation}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MovieDetail"
+        component={MovieDetail}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
   )
 }
