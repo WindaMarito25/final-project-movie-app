@@ -3,7 +3,7 @@ import { API_ACCESS_TOKEN } from '@env'
 export const fetchMovieById = async (movieId: string) => {
   try {
     const response = await fetch(
-      `https://api.themoviedb.org/3/movie/${movieId}?api_key=72334be6d59850d03fdf375b40b6c8a1`,
+      `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_ACCESS_TOKEN}`,
     )
     if (!response.ok) {
       throw new Error('Failed to fetch movie')
