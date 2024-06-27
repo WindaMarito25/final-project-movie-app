@@ -25,7 +25,7 @@ const movieLists: MovieListProps[] = [
   },
 ]
 
-const Home = (): JSX.Element => {
+const HomeScreen = (): JSX.Element => {
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -52,4 +52,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Home
+export default HomeScreen
