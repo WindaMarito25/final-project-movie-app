@@ -3,9 +3,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Feather } from '@expo/vector-icons'
 import HomeScreen from '../screens/Home'
-import Search from '../screens/Search'
+import SearchScreen from '../screens/Search'
 import Favorite from '../screens/Favorite'
-import MovieDetail from './MovieDetail'
+import MovieDetail from '../navigations/MovieDetail'
+import CategorySearchResult from '../navigations/CategorySearchResult'
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
@@ -22,25 +23,25 @@ const HomeStackNavigator = (): JSX.Element => (
       component={MovieDetail}
       options={{ headerShown: true, title: 'Movie Detail' }}
     />
-    <Stack.Screen
-      name="FavoriteScreen"
-      component={Favorite}
-      options={{ headerShown: true, title: 'Favorite' }}
-    />
   </Stack.Navigator>
 )
 
 const SearchStackNavigator = (): JSX.Element => (
   <Stack.Navigator>
     <Stack.Screen
-      name="Search"
-      component={Search}
+      name="SearchScreen"
+      component={SearchScreen}
       options={{ headerShown: false }}
     />
     <Stack.Screen
       name="MovieDetail"
       component={MovieDetail}
       options={{ headerShown: true, title: 'Movie Detail' }}
+    />
+    <Stack.Screen
+      name="CategorySearchResult"
+      component={CategorySearchResult}
+      options={{ headerShown: true, title: 'Category Search Result' }}
     />
   </Stack.Navigator>
 )

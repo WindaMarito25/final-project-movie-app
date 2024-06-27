@@ -19,10 +19,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 const MovieDetail = ({ route }: any): JSX.Element => {
   const { id, coverType } = route.params
   const [movie, setMovie] = useState<Movie | null>(null)
+  const [isFavorite, setIsFavorite] = useState<boolean>(false)
   const [recommendations, setRecommendations] = useState<Movie[]>([])
   const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string | null>(null)
-  const [isFavorite, setIsFavorite] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>('')
 
   useEffect(() => {
     fetchMovieDetail()
@@ -42,7 +42,16 @@ const MovieDetail = ({ route }: any): JSX.Element => {
       )
       setRecommendations(recommendationData.results)
     } catch (err) {
-      setError('Failed to fetch data')
+      if (err instanceof Error) {
+        setError(`Failed to fetch data: ${err.message}`)
+        console.error('Error fetching movie detail:', err.message)
+      } else {
+        setError('An unknown error occurred')
+        console.error(
+          'An unknown error occurred while fetching movie detail:',
+          err,
+        )
+      }
     } finally {
       setLoading(false)
     }
@@ -73,7 +82,7 @@ const MovieDetail = ({ route }: any): JSX.Element => {
       await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList))
       setIsFavorite(true)
     } catch (error) {
-      console.log(error)
+      console.error('Error adding to favorites:', error)
     }
   }
 
@@ -86,7 +95,7 @@ const MovieDetail = ({ route }: any): JSX.Element => {
       await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList))
       setIsFavorite(false)
     } catch (error) {
-      console.log(error)
+      console.error('Error removing from favorites:', error)
     }
   }
 
@@ -98,7 +107,7 @@ const MovieDetail = ({ route }: any): JSX.Element => {
       const isFav = favMovieList.some((movie) => movie.id === id)
       setIsFavorite(isFav)
     } catch (error) {
-      console.log(error)
+      console.error('Error checking favorites:', error)
     }
   }
 
@@ -225,6 +234,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 4,
+    paddingLeft: 8,
   },
   gradientStyle: {
     padding: 8,
@@ -244,6 +254,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
+    paddingLeft: 8,
   },
   rating: {
     color: 'yellow',
@@ -260,7 +271,7 @@ const styles = StyleSheet.create({
   gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   gridItem: {
     width: '48%',
